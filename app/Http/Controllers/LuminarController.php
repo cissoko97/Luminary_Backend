@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\model\User;
 use App\model\Luminar;
 use Illuminate\Http\Request;
+use App\Http\Resources\LuminarCollection;
+use App\Http\Resources\Luminar as LuminarResource;
 
 class LuminarController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,17 +18,7 @@ class LuminarController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $user = new User();
+        return new LuminarCollection(Luminar::all());
     }
 
     /**
@@ -36,7 +29,10 @@ class LuminarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $luminar = Luminar::create($request->all());
+        return (new LuminarResource($luminar))
+                ->response()
+                ->setStatusCode(201);
     }
 
     /**
@@ -45,20 +41,9 @@ class LuminarController extends Controller
      * @param  \App\model\Luminar  $luminar
      * @return \Illuminate\Http\Response
      */
-    public function show(Luminar $luminar)
+    public function show($id)
     {
-        dd($luminar);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\model\Luminar  $luminar
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Luminar $luminar)
-    {
-        //
+        return new LuminarResource(Luminar::findOrFail($id));
     }
 
     /**
@@ -68,9 +53,11 @@ class LuminarController extends Controller
      * @param  \App\model\Luminar  $luminar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Luminar $luminar)
+    public function update(Request $request,$id)
     {
-        //
+        $luminar = Luminar::findOrFail($id);
+        $luminar->update($request->all());
+        return new LuminarResource($luminar);
     }
 
     /**
@@ -79,8 +66,11 @@ class LuminarController extends Controller
      * @param  \App\model\Luminar  $luminar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Luminar $luminar)
+    public function destroy($id)
     {
-        //
+        $luminar = Luminar::findOrFail($id);
+        $luminar->delete();
+
+        return response()->json(null, 204);
     }
 }

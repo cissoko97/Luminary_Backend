@@ -11,10 +11,7 @@
 |
 */
 Route::get('',function(){
-    $name= 'CISSOKO';
+    $name= 'CK_CODER';
     return view('welcome' , compact('name'));
 });
-Route::post('luminars', 'LuminarController@store');
-Route::get('luminars/{luminar}', 'LuminarController@show');
-Route::put('luminars/{luminar}/edit', 'LuminarController@update');
-Route::delete('luminars/{luminar}', 'LuminarController@destroy');
+
